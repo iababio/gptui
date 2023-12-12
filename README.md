@@ -72,7 +72,7 @@ docker compose up -d
 **1. Clone Repo**
 
 ```bash
-git clone https://github.com/dotneet/smart-chatbot-ui.git
+git clone https://github.com/iababio/fordham-ai.git
 ```
 
 **2. Install Dependencies**

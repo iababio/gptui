@@ -75,13 +75,13 @@ if (process.env.AZURE_AD_CLIENT_ID) {
 
 let pages: Partial<PagesOptions> = {};
 
-if (process.env.NEXTAUTH_ENABLED === 'false') {
-  pages['signIn'] = '/auth/autologin';
-}
+// if (process.env.NEXTAUTH_ENABLED === 'false') {
+//   pages['signIn'] = '/auth/autologin';
+// }
 
 const callbacks: Partial<CallbacksOptions> = {
   async signIn({ user, account, profile, email, credentials }) {
-    await updateOrCreateUser(user.email!, user.name || "");
+    await updateOrCreateUser(user.email!, user.name || "", user.image || "");
     return true
   },
   async session({ session, token, user }) {
@@ -117,7 +117,7 @@ async function getUser(session: Session): Promise<User> {
   return (await (await getUserDb()).getUser(userId))!;
 }
 
-async function updateOrCreateUser(email: string, name?: string): Promise<User> {
+async function updateOrCreateUser(email: string, name?: string, image?: string): Promise<User> {
   const userInfoDb = await getUserDb();
   const userId = getUserHashFromMail(email);
   const currentUser = await userInfoDb.getUser(userId);
@@ -127,6 +127,7 @@ async function updateOrCreateUser(email: string, name?: string): Promise<User> {
       _id: userId,
       email: email,
       name: name,
+      image: image,
       role: UserRole.USER
     }
     await userInfoDb.addUser(updatedUser);

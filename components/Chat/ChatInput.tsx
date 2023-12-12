@@ -478,16 +478,16 @@ export const ChatInput = ({ onSend, onRegenerate, textareaRef }: Props) => {
       </ChatInputContainer>
       <div className="px-3 pt-2 pb-3 text-center text-[12px] text-black/50 dark:text-white/50 md:px-4 md:pt-3 md:pb-6">
         <a
-          href="https://github.com/dotneet/smart-chatbot-ui"
+          href="https://github.com/ababio/fordham-ai"
           target="_blank"
           rel="noreferrer"
           className="underline"
         >
-          Smart ChatBot UI
+          @Fordham Ai
         </a>
         .{' '}
         {t(
-          "Smart Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality.",
+          "@Fordham Ai is an advanced chatbot kit for Fordham University || Developer Boakye I. Ababio",
         )}
       </div>
     </div>
