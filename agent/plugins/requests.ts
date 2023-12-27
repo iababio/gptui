@@ -1,5 +1,6 @@
 // This file is derived from:
 // https://github.com/hwchase17/langchainjs/blob/main/langchain/src/tools/requests.ts
+import { getOpenAIApiEmbeddings } from '@/utils/server/openai';
 import {
   calcCosineSimilarity,
   createEmbedding,
@@ -13,7 +14,6 @@ import {
 import { Action, Plugin } from '@/types/agent';
 
 import { TaskExecutionContext } from './executor';
-import { getOpenAIApiEmbeddings } from '@/utils/server/openai';
 
 export interface Headers {
   [key: string]: string;
@@ -28,7 +28,7 @@ export class RequestsGetTool implements Plugin, RequestTool {
   nameForModel = 'requests_get_api';
   displayForUser = false;
 
-  constructor(public headers: Headers = {}) { }
+  constructor(public headers: Headers = {}) {}
 
   async execute(context: TaskExecutionContext, action: Action) {
     const input = action.pluginInput;
@@ -48,7 +48,7 @@ export class RequestsPostTool implements Plugin, RequestTool {
   nameForModel = 'requests_post_api';
   displayForUser = false;
 
-  constructor(public headers: Headers = {}) { }
+  constructor(public headers: Headers = {}) {}
 
   async execute(context: TaskExecutionContext, action: Action) {
     const input = action.pluginInput;
@@ -82,7 +82,7 @@ export class RequestsGetWebpageTool implements Plugin, RequestTool {
   nameForModel = 'requests_get_webpage_content';
   displayForUser = true;
 
-  constructor(public headers: Headers = {}) { }
+  constructor(public headers: Headers = {}) {}
 
   async execute(context: TaskExecutionContext, action: Action) {
     const input = action.pluginInput;
@@ -109,7 +109,7 @@ export class RequestsGetWebpageTool implements Plugin, RequestTool {
     const thoughtEmbedding = await createEmbedding(
       action.thought,
       openai,
-      context.userId
+      context.userId,
     );
     const webEmbeddings = await Promise.all(promises);
     const sortedWebChunks = webEmbeddings
@@ -138,7 +138,7 @@ export class RequestsPostWebpageTool implements Plugin, RequestTool {
   nameForModel = 'requests_post_webpage';
   displayForUser = false;
 
-  constructor(public headers: Headers = {}) { }
+  constructor(public headers: Headers = {}) {}
 
   async execute(context: TaskExecutionContext, action: Action) {
     const input = action.pluginInput;

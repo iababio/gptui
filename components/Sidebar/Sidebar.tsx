@@ -11,8 +11,6 @@ import {
 } from './components/OpenCloseButton';
 
 import Search from '../Search';
-import UniLogo from '/public/Fordham logo.png';
-
 
 interface Props<T> {
   isOpen: boolean;
@@ -66,13 +64,8 @@ const Sidebar = <T,>({
   return isOpen ? (
     <div>
       <div
-          className={`fixed top-0 ${side}-0 z-40 flex h-full w-[260px] flex-none flex-col space-y-2 bg-black p-2 text-[14px] transition-all sm:relative sm:top-0`}
+        className={`fixed top-0 ${side}-0 z-40 flex h-full w-[260px] flex-none flex-col space-y-2 bg-[#190000bd] p-2 text-[14px] transition-all sm:relative sm:top-0`}
       >
-        <Link href={'/'} className="flex items-center bg-white p-2">
-          <div className="flex items-center bg-white">
-            <Image src={UniLogo} alt={'Fordham Logo'} height="40" width="250" />
-          </div>
-        </Link>
 
         <div className="flex items-center">
           <button

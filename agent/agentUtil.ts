@@ -2,11 +2,11 @@ import { serializeMessages } from '@/utils/server/message';
 
 import { Message } from '@/types/chat';
 
-import { Tiktoken } from 'tiktoken';
 import chalk from 'chalk';
 import { ConsoleCallbackHandler } from 'langchain/callbacks';
 import { LLMResult } from 'langchain/dist/schema';
 import { ChatCompletionRequestMessage } from 'openai';
+import { Tiktoken } from 'tiktoken';
 
 const strip = (str: string, c: string) => {
   const m = str.match(new RegExp(`^${c}(.*)${c}$`));

@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 
 interface Props {
   inputRef?: React.RefObject<HTMLInputElement>;
-  isEditable?: boolean
+  isEditable?: boolean;
 }
 export const InputText = ({
   inputRef,

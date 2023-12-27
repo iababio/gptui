@@ -1,8 +1,8 @@
 import * as z from 'zod';
 
 export enum UserRole {
-  ADMIN = "admin",
-  USER = "user"
+  ADMIN = 'admin',
+  USER = 'user',
 }
 
 export const UserSchema = z.object({
@@ -11,7 +11,7 @@ export const UserSchema = z.object({
   name: z.string().optional(),
   image: z.string().optional(),
   role: z.nativeEnum(UserRole).optional(),
-  monthlyUSDConsumptionLimit: z.number().optional()
+  monthlyUSDConsumptionLimit: z.number().optional(),
 });
 
 export const UserSchemaArray = z.array(UserSchema);

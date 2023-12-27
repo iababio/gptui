@@ -1,16 +1,31 @@
-import NextAuth, { CallbacksOptions, NextAuthOptions, PagesOptions, Session } from 'next-auth';
+import NextAuth, {
+  Account,
+  CallbacksOptions,
+  NextAuthOptions,
+  PagesOptions,
+  Profile,
+  Session,
+} from 'next-auth';
 import AzureADProvider from 'next-auth/providers/azure-ad';
 import CognitoProvider from 'next-auth/providers/cognito';
 import Credentials from 'next-auth/providers/credentials';
 import GithubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
-import { UserInfoDb, getDb } from '@/utils/server/storage';
-import { User, UserRole } from '@/types/user';
+
 import { getUserHashFromMail } from '@/utils/server/auth';
+import { UserInfoDb, getDb } from '@/utils/server/storage';
+
+import { User, UserRole } from '@/types/user';
 
 import loggerFn from 'pino';
 
 const logger = loggerFn({ name: 'auth' });
+
+interface UserProfile extends Profile {
+  email_verified: boolean;
+  email: string;
+  picture: string;
+}
 
 const providers = [];
 if (process.env.NEXTAUTH_ENABLED === 'false') {
@@ -66,29 +81,30 @@ if (process.env.AZURE_AD_CLIENT_ID) {
           id: profile.oid,
           name: profile.name,
           email: profile.email,
-          image: null
-        }
-      }
+          image: null,
+        };
+      },
     }),
   );
 }
 
 let pages: Partial<PagesOptions> = {};
 
-// if (process.env.NEXTAUTH_ENABLED === 'false') {
-//   pages['signIn'] = '/auth/autologin';
-// }
+if (process.env.NEXTAUTH_ENABLED === 'false') {
+  pages['signIn'] = '/auth/autologin';
+}
 
 const callbacks: Partial<CallbacksOptions> = {
   async signIn({ user, account, profile, email, credentials }) {
-    await updateOrCreateUser(user.email!, user.name || "", user.image || "");
-    return true
+    const { picture, name } = profile as UserProfile;
+    await updateOrCreateUser(user.email!, user.name || '', picture || '');
+    return true;
   },
   async session({ session, token, user }) {
     session.user = await getUser(session);
-    return session
-  }
-}
+    return session;
+  },
+};
 
 export const authOptions: NextAuthOptions = {
   providers: providers,
@@ -104,7 +120,7 @@ export const authOptions: NextAuthOptions = {
     },
   },
   pages,
-  callbacks: callbacks
+  callbacks: callbacks,
 };
 
 async function getUserDb() {
@@ -112,12 +128,16 @@ async function getUserDb() {
 }
 
 async function getUser(session: Session): Promise<User> {
-  if (!session.user?.email) throw new Error("Unauthorized");
+  if (!session.user?.email) throw new Error('Unauthorized');
   const userId = getUserHashFromMail(session.user.email);
   return (await (await getUserDb()).getUser(userId))!;
 }
 
-async function updateOrCreateUser(email: string, name?: string, image?: string): Promise<User> {
+async function updateOrCreateUser(
+  email: string,
+  name?: string,
+  image?: string,
+): Promise<User> {
   const userInfoDb = await getUserDb();
   const userId = getUserHashFromMail(email);
   const currentUser = await userInfoDb.getUser(userId);
@@ -128,14 +148,13 @@ async function updateOrCreateUser(email: string, name?: string, image?: string):
       email: email,
       name: name,
       image: image,
-      role: UserRole.USER
-    }
+      role: UserRole.USER,
+    };
     await userInfoDb.addUser(updatedUser);
-  }
-  else {
+  } else {
     updatedUser = {
       ...currentUser,
-      name: name
+      name: name,
     };
     await userInfoDb.saveUser(updatedUser);
   }

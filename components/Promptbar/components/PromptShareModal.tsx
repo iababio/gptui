@@ -2,10 +2,11 @@ import { FC, KeyboardEvent, useEffect, useRef, useState } from 'react';
 
 import { useTranslation } from 'next-i18next';
 
+import { FolderInterface } from '@/types/folder';
 import { Prompt } from '@/types/prompt';
 
 import { Dialog } from '@/components/Dialog/Dialog';
-import { FolderInterface } from '@/types/folder';
+
 import { v4 as uuidv4 } from 'uuid';
 
 interface Props {
@@ -24,7 +25,9 @@ export const PromptShareModal: FC<Props> = ({
   onPublishPrompt,
 }) => {
   const { t } = useTranslation('promptbar');
-  const [selectedFolderId, setSelectedFolder] = useState<string>(folders.length > 0 ? folders[0].id : "");
+  const [selectedFolderId, setSelectedFolder] = useState<string>(
+    folders.length > 0 ? folders[0].id : '',
+  );
 
   const handleEnter = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -76,7 +79,7 @@ export const PromptShareModal: FC<Props> = ({
           const updatedPrompt = {
             ...prompt,
             id: uuidv4(),
-            folderId: selectedFolderId
+            folderId: selectedFolderId,
           };
           onPublishPrompt(updatedPrompt);
           onClose();

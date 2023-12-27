@@ -2,10 +2,10 @@ import { PublicPromptsDb, getDb } from '@/utils/server/storage';
 
 import { FolderSchema } from '@/types/folder';
 
+import { validateAdminAccess } from '../context';
 import { procedure, router } from '../trpc';
 
 import { z } from 'zod';
-import { validateAdminAccess } from '../context';
 
 export const publicFolders = router({
   list: procedure.query(async ({ ctx }) => {
@@ -25,5 +25,5 @@ export const publicFolders = router({
     const publicPromptsDb = new PublicPromptsDb(await getDb());
     await publicPromptsDb.saveFolder(input);
     return { success: true };
-  })
+  }),
 });

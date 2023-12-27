@@ -1,8 +1,8 @@
 import {
   IconBulbFilled,
   IconCheck,
-  IconTrash,
   IconCloudUpload,
+  IconTrash,
   IconX,
 } from '@tabler/icons-react';
 import {
@@ -13,6 +13,8 @@ import {
   useState,
 } from 'react';
 
+import usePublicFolders from '@/hooks/usePublicFolders';
+
 import { Prompt } from '@/types/prompt';
 
 import SidebarActionButton from '@/components/Buttons/SidebarActionButton';
@@ -20,7 +22,6 @@ import SidebarActionButton from '@/components/Buttons/SidebarActionButton';
 import PromptbarContext from '../PromptBar.context';
 import { PromptModal } from './PromptModal';
 import { PromptShareModal } from './PromptShareModal';
-import usePublicFolders from '@/hooks/usePublicFolders';
 
 interface Props {
   prompt: Prompt;
@@ -33,10 +34,17 @@ interface Props {
   handlePublishPrompt(prompt: Prompt): void;
 }
 
-export const PromptComponent = ({ prompt, isEditable = true, isRemovable = true, isShareable = true, isDraggable = true, handleUpdatePrompt, handleDeletePrompt, handlePublishPrompt }: Props) => {
-  const {
-    dispatch: promptDispatch,
-  } = useContext(PromptbarContext);
+export const PromptComponent = ({
+  prompt,
+  isEditable = true,
+  isRemovable = true,
+  isShareable = true,
+  isDraggable = true,
+  handleUpdatePrompt,
+  handleDeletePrompt,
+  handlePublishPrompt,
+}: Props) => {
+  const { dispatch: promptDispatch } = useContext(PromptbarContext);
 
   const [publicFolders] = usePublicFolders();
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -44,7 +52,9 @@ export const PromptComponent = ({ prompt, isEditable = true, isRemovable = true,
   const [isDeleting, setIsDeleting] = useState(false);
   const [isRenaming, setIsRenaming] = useState(false);
   const [renameValue, setRenameValue] = useState('');
-  const [actionButtonCount] = useState([isShareable, isRemovable].filter((bool) => bool).length);
+  const [actionButtonCount] = useState(
+    [isShareable, isRemovable].filter((bool) => bool).length,
+  );
 
   const handleUpdate = (prompt: Prompt) => {
     handleUpdatePrompt(prompt);
@@ -100,7 +110,9 @@ export const PromptComponent = ({ prompt, isEditable = true, isRemovable = true,
           e.stopPropagation();
           setShowModal(true);
         }}
-        onDragStart={isDraggable ? (e) => handleDragStart(e, prompt) : undefined}
+        onDragStart={
+          isDraggable ? (e) => handleDragStart(e, prompt) : undefined
+        }
         onMouseLeave={() => {
           setIsDeleting(false);
           setIsRenaming(false);
@@ -109,8 +121,10 @@ export const PromptComponent = ({ prompt, isEditable = true, isRemovable = true,
       >
         <IconBulbFilled size={18} />
 
-        <div className="relative max-h-5 flex-1 overflow-hidden text-ellipsis whitespace-nowrap break-all text-left text-[12.5px] leading-3"
-          style={{ paddingRight: actionButtonCount * 1.5 + "rem" }}>
+        <div
+          className="relative max-h-5 flex-1 overflow-hidden text-ellipsis whitespace-nowrap break-all text-left text-[12.5px] leading-3"
+          style={{ paddingRight: actionButtonCount * 1.5 + 'rem' }}
+        >
           {prompt.name}
         </div>
       </button>
@@ -129,16 +143,16 @@ export const PromptComponent = ({ prompt, isEditable = true, isRemovable = true,
 
       {!isDeleting && !isRenaming && (
         <div className="absolute right-1 z-10 flex text-gray-300">
-          {isShareable &&
+          {isShareable && (
             <SidebarActionButton handleClick={() => setShowShareModal(true)}>
               <IconCloudUpload size={18} />
             </SidebarActionButton>
-          }
-          {isRemovable &&
+          )}
+          {isRemovable && (
             <SidebarActionButton handleClick={handleOpenDeleteModal}>
               <IconTrash size={18} />
             </SidebarActionButton>
-          }
+          )}
         </div>
       )}
 

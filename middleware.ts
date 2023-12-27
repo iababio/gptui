@@ -1,5 +1,16 @@
 import { withAuth } from 'next-auth/middleware';
+import { NextRequest, NextResponse } from 'next/server';
 
+export async function middleware(request: NextRequest) {
+  try {
+    const email = request.cookies.get('email');
+    if (request.nextUrl.pathname.startsWith('/login') && email) {
+      return NextResponse.rewrite(new URL('/', request.url));
+    }
+  } catch (error: any) {
+    console.error(error.message); //raises the error
+  }
+}
 export default withAuth({
   callbacks: {
     async authorized({ token }) {
@@ -19,4 +30,4 @@ export default withAuth({
   },
 });
 
-export const config = { matcher: ['/'] };
+export const config = { matcher: ['/chat'] };

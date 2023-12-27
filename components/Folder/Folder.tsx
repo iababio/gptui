@@ -2,18 +2,12 @@ import {
   IconCaretDown,
   IconCaretRight,
   IconCheck,
+  IconFolderPlus,
   IconPencil,
   IconTrash,
-  IconFolderPlus,
   IconX,
 } from '@tabler/icons-react';
-import {
-  KeyboardEvent,
-  ReactElement,
-  useEffect,
-  useState,
-} from 'react';
-
+import { KeyboardEvent, ReactElement, useEffect, useState } from 'react';
 
 import { FolderInterface } from '@/types/folder';
 
@@ -24,7 +18,7 @@ import { InputText } from '../Input/InputText';
 interface Props {
   currentFolder: FolderInterface;
   searchTerm: string;
-  handleDrop?: ((e: any, folder: FolderInterface) => void);
+  handleDrop?: (e: any, folder: FolderInterface) => void;
   folderComponent: (ReactElement | undefined)[];
   handleAddItem?: () => void;
   handleEditFolder?: (folder: FolderInterface) => void;
@@ -38,7 +32,7 @@ const Folder = ({
   folderComponent,
   handleAddItem,
   handleEditFolder,
-  handleDeleteFolder
+  handleDeleteFolder,
 }: Props) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isRenaming, setIsRenaming] = useState(false);
@@ -53,10 +47,11 @@ const Folder = ({
   };
 
   const handleRename = async () => {
-    handleEditFolder && handleEditFolder({
-      ...currentFolder,
-      name: renameValue,
-    });
+    handleEditFolder &&
+      handleEditFolder({
+        ...currentFolder,
+        name: renameValue,
+      });
     setRenameValue('');
     setIsRenaming(false);
   };
@@ -205,7 +200,7 @@ const Folder = ({
         )}
       </div>
 
-      {isOpen ? (<div className="pl-2"> {folderComponent} </div>) : null}
+      {isOpen ? <div className="pl-2"> {folderComponent} </div> : null}
     </>
   );
 };

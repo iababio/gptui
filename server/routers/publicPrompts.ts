@@ -2,11 +2,11 @@ import { PublicPromptsDb, UserDb, getDb } from '@/utils/server/storage';
 
 import { PromptSchema } from '@/types/prompt';
 
+import { Context, isAdminUser } from '../context';
 import { procedure, router } from '../trpc';
 
-import { z } from 'zod';
 import { TRPCError } from '@trpc/server';
-import { Context, isAdminUser } from '../context';
+import { z } from 'zod';
 
 export const publicPrompts = router({
   list: procedure.query(async ({ ctx }) => {
@@ -31,7 +31,7 @@ export const publicPrompts = router({
     await validateOwnerOrAdminAccess(input.id, ctx);
     await publicPromptsDb.savePrompt(input);
     return { success: true };
-  })
+  }),
 });
 
 async function validateOwnerOrAdminAccess(promptId: string, ctx: Context) {

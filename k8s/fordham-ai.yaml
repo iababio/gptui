@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: GPT_Ui-ai
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: GPT_Ui-ai
+  name: GPT_Ui-ai
+type: Opaque
+data:
+  OPENAI_API_KEY: <base64 encoded key>
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: GPT_Ui-ai
+  name: GPT_Ui-ai
+  labels:
+    app: GPT_Ui-ai
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: GPT_Ui-ai
+  template:
+    metadata:
+      labels:
+        app: GPT_Ui-ai
+    spec:
+      containers:
+        - name: GPT_Ui-ai
+          image: melch7/GPT_Ui-ai:latest
+          resources: {}
+          ports:
+            - containerPort: 3000
+          env:
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: GPT_Ui-ai
+                  key: OPENAI_API_KEY
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: GPT_Ui-ai
+  name: GPT_Ui-ai
+  labels:
+    app: GPT_Ui-ai
+spec:
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 3000
+  selector:
+    app: GPT_Ui-ai
+  type: ClusterIP

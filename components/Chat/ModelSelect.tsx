@@ -39,30 +39,33 @@ export const ModelSelect = () => {
           value={selectedConversation?.model?.id || defaultModelId}
           onChange={handleChange}
         >
-          {models.filter(m => m.type === OpenAIModelType.CHAT).map((model) => (
-            <option
-              key={model.id}
-              value={model.id}
-              className="dark:bg-[#343541] dark:text-white"
-            >
-              {model.id === defaultModelId
-                ? `Default (${model.name})`
-                : model.name}
-            </option>
-          ))}
+          {models
+            .filter((m) => m.type === OpenAIModelType.CHAT)
+            .map((model) => (
+              <option
+                key={model.id}
+                value={model.id}
+                className="dark:bg-[#343541] dark:text-white"
+              >
+                {model.id === defaultModelId
+                  ? `Default (${model.name})`
+                  : model.name}
+              </option>
+            ))}
         </select>
       </div>
-      {!isAzureOpenAI && <div className="w-full mt-3 text-left text-neutral-700 dark:text-neutral-400 flex items-center">
-        <a
-          href="https://platform.openai.com/account/usage"
-          target="_blank"
-          className="flex items-center"
-        >
-          <IconExternalLink size={18} className={'inline mr-1'} />
-          {t('View Account Usage')}
-        </a>
-      </div>
-      }
+      {!isAzureOpenAI && (
+        <div className="w-full mt-3 text-left text-neutral-700 dark:text-neutral-400 flex items-center">
+          <a
+            href="https://platform.openai.com/account/usage"
+            target="_blank"
+            className="flex items-center"
+          >
+            <IconExternalLink size={18} className={'inline mr-1'} />
+            {t('View Account Usage')}
+          </a>
+        </div>
+      )}
     </div>
   );
 };

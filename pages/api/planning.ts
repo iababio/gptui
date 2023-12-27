@@ -2,6 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 import { OpenAIError } from '@/utils/server';
 import { ensureHasValidSession, getUserHash } from '@/utils/server/auth';
+import { getErrorResponseBody } from '@/utils/server/error';
+import { verifyUserLlmUsage } from '@/utils/server/llmUsage';
 
 import { PlanningRequest, PlanningResponse } from '@/types/agent';
 
@@ -9,8 +11,6 @@ import { executeNotConversationalReactAgent } from '@/agent/agent';
 import { createContext } from '@/agent/plugins/executor';
 import path from 'node:path';
 import { v4 } from 'uuid';
-import { getErrorResponseBody } from '@/utils/server/error';
-import { verifyUserLlmUsage } from '@/utils/server/llmUsage';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   // Vercel Hack
@@ -36,7 +36,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     } catch (e: any) {
       return res.status(429).json({ error: e.message });
     }
-    
+
     let { taskId } = req.body;
     if (!taskId) {
       taskId = v4();

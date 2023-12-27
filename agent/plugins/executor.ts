@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
+import { getUserHash } from '@/utils/server/auth';
 import { extractHeaders } from '@/utils/server/http';
 import { getTiktokenEncoding } from '@/utils/server/tiktoken';
 
@@ -10,7 +11,6 @@ import { listAllTools } from './list';
 import { Headers } from './requests';
 
 import { Tiktoken } from 'tiktoken';
-import { getUserHash } from '@/utils/server/auth';
 
 export interface TaskExecutionContext {
   taskId: string;
@@ -31,7 +31,8 @@ export const createContext = async (
   verbose: boolean,
 ): Promise<TaskExecutionContext> => {
   const headers = extractHeaders(request);
-  const locale = headers['accept-language']?.split(',')[0]?.split('-')[0] || 'en';
+  const locale =
+    headers['accept-language']?.split(',')[0]?.split('-')[0] || 'en';
   const userId = await getUserHash(request, response);
   return {
     taskId,
@@ -54,7 +55,7 @@ export const createContext = async (
         }
       }
     },
-    userId
+    userId,
   };
 };
 

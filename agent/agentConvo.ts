@@ -1,3 +1,7 @@
+import { OpenAIError } from '@/utils/server';
+import { saveLlmUsage } from '@/utils/server/llmUsage';
+import { getOpenAIApi } from '@/utils/server/openai';
+
 import { Plugin, PluginResult, ReactAgentResult } from '@/types/agent';
 import { Message } from '@/types/chat';
 
@@ -14,9 +18,6 @@ import chalk from 'chalk';
 import { CallbackManager } from 'langchain/callbacks';
 import { PromptTemplate } from 'langchain/prompts';
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from 'openai';
-import { getOpenAIApi } from '@/utils/server/openai';
-import { OpenAIError } from '@/utils/server';
-import { saveLlmUsage } from '@/utils/server/llmUsage';
 
 const setupCallbackManager = (verbose: boolean): void => {
   const callbackManager = new CallbackManager();
@@ -197,15 +198,15 @@ export const executeReactAgent = async (
   } catch (error: any) {
     if (error.response) {
       const { message, type, param, code } = error.response.data.error;
-      throw new OpenAIError(message, type, param, code)
-    } else throw error
+      throw new OpenAIError(message, type, param, code);
+    } else throw error;
   }
 
-  await saveLlmUsage(context.userId, context.model.id, "agentConv", {
+  await saveLlmUsage(context.userId, context.model.id, 'agentConv', {
     prompt: result.data.usage!.prompt_tokens,
     completion: result.data.usage!.completion_tokens,
-    total: result.data.usage!.total_tokens
-  })
+    total: result.data.usage!.total_tokens,
+  });
 
   const responseText = result.data.choices[0].message?.content;
   const ellapsed = Date.now() - start;

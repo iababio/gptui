@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 
 import useConversations from '@/hooks/useConversations';
+import useFolders from '@/hooks/useFolders';
 
 import { FolderInterface } from '@/types/folder';
 
@@ -9,7 +10,6 @@ import HomeContext from '@/pages/api/home/home.context';
 import Folder from '@/components/Folder';
 
 import { ConversationComponent } from './Conversation';
-import useFolders from '@/hooks/useFolders';
 
 interface Props {
   searchTerm: string;

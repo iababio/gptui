@@ -3,11 +3,11 @@ import { getServerSession } from 'next-auth';
 
 import { DEFAULT_SYSTEM_PROMPT } from '@/utils/app/const';
 import { OpenAIStream } from '@/utils/server';
-import { saveLlmUsage, verifyUserLlmUsage } from '@/utils/server/llmUsage';
 import { ensureHasValidSession, getUserHash } from '@/utils/server/auth';
+import { getErrorResponseBody } from '@/utils/server/error';
+import { saveLlmUsage, verifyUserLlmUsage } from '@/utils/server/llmUsage';
 import { createMessagesToSend } from '@/utils/server/message';
 import { getTiktokenEncoding } from '@/utils/server/tiktoken';
-import { getErrorResponseBody } from '@/utils/server/error';
 
 import { ChatBodySchema } from '@/types/chat';
 
@@ -49,7 +49,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (!systemPromptToSend) {
       systemPromptToSend = DEFAULT_SYSTEM_PROMPT;
     }
-    let { messages: messagesToSend, maxToken, tokenCount } = createMessagesToSend(
+    let {
+      messages: messagesToSend,
+      maxToken,
+      tokenCount,
+    } = createMessagesToSend(
       encoding,
       model,
       systemPromptToSend,
@@ -78,7 +82,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const decoder = new TextDecoder();
     const reader = stream.getReader();
     let closed = false;
-    let responseText = "";
+    let responseText = '';
     while (!closed) {
       await reader.read().then(({ done, value }) => {
         if (done) {
@@ -92,11 +96,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       });
     }
     const completionTokenCount = encoding.encode(responseText).length;
-    await saveLlmUsage(userId, model.id, "chat", {
+    await saveLlmUsage(userId, model.id, 'chat', {
       prompt: tokenCount,
       completion: completionTokenCount,
-      total: tokenCount + completionTokenCount
-    })
+      total: tokenCount + completionTokenCount,
+    });
   } catch (error) {
     console.error(error);
     const errorRes = getErrorResponseBody(error);
@@ -105,6 +109,5 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     encoding.free();
   }
 };
-
 
 export default handler;

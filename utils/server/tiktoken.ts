@@ -1,11 +1,12 @@
 import cl100k from 'tiktoken/encoders/cl100k_base.json';
 import p50k from 'tiktoken/encoders/p50k_base.json';
 import { Tiktoken } from 'tiktoken/lite';
+
 const { encoding_for_model } = require('tiktoken');
 
 export const getTiktokenEncoding = async (model: string): Promise<Tiktoken> => {
   // Azure fix
-  const modelId = model.replace('gpt-35', 'gpt-3.5')
+  const modelId = model.replace('gpt-35', 'gpt-3.5');
   if (modelId.indexOf('text-davinci-') !== -1) {
     return new Tiktoken(p50k.bpe_ranks, p50k.special_tokens, p50k.pat_str);
   }

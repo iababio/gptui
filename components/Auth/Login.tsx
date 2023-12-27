@@ -2,12 +2,15 @@ import { LogIn } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 import React from 'react';
 
+
+
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { Button } from '@/components/Ui/button';
 
-import logo from '../../public/fordham.png';
+import logo from '../../public/chatgpt.png';
+
 
 export type User = {
   name: string;
@@ -54,7 +57,7 @@ export default function Home() {
                             }
                             className="bg-transparent text-white bg-gradient-to-r from-rose-900 to-pink-900"
                           >
-                            Login with Fordham ID
+                            Login with Google
                             <LogIn className="w-4 h-4 ml-2" />
                           </Button>
                         </Link>
@@ -66,13 +69,13 @@ export default function Home() {
               <div className="items-center justify-center w-full mt-4">
                 <div className="flex ml-2 items-center justify-center">
                   <h1 className="mr-4 text-5xl font-semibold text-white">
-                    @Fordham Ai
+                    @GPT_Ui
                   </h1>
                 </div>
 
                 <p className="max-w-xl mt-10 mb-10 ml-6 text-lg  text-slate-200 text-gray-50">
-                  Join Students, researchers and Professors who are using @LITE
-                  for their projects design and development
+                  Join Students, researchers and Professors who are using
+                  @GPT_Ui for their projects design and development
                 </p>
               </div>
             </div>

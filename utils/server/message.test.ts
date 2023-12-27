@@ -1,9 +1,10 @@
-import {describe, expect, it} from 'vitest'
-import {Message} from '@/types/chat';
+import { Message } from '@/types/chat';
+import { OpenAIModel, OpenAIModelID, OpenAIModelType } from '@/types/openai';
 
-import {createMessagesToSend} from './message';
-import {getTiktokenEncoding} from './tiktoken';
-import {OpenAIModel, OpenAIModelID, OpenAIModelType} from "@/types/openai";
+import { createMessagesToSend } from './message';
+import { getTiktokenEncoding } from './tiktoken';
+
+import { describe, expect, it } from 'vitest';
 
 describe('createMessagesToSend', () => {
   it('should create messages to send and return max token', async () => {
@@ -14,12 +15,12 @@ describe('createMessagesToSend', () => {
       name: 'gpt-3.5-turbo',
       tokenLimit: 1100,
       maxLength: 4000,
-      type: OpenAIModelType.CHAT
-    }
+      type: OpenAIModelType.CHAT,
+    };
     const messages: Message[] = [
-      {role: 'user', content: 'World'},
-      {role: 'assistant', content: 'How are you?'},
-      {role: 'user', content: 'Fine, thank you.'},
+      { role: 'user', content: 'World' },
+      { role: 'assistant', content: 'How are you?' },
+      { role: 'user', content: 'Fine, thank you.' },
     ];
 
     const result = createMessagesToSend(
@@ -30,7 +31,7 @@ describe('createMessagesToSend', () => {
       messages,
     );
 
-    expect(result.messages[0]).toEqual({role: 'user', content: 'World'});
+    expect(result.messages[0]).toEqual({ role: 'user', content: 'World' });
     expect(result.maxToken).toEqual(1066);
   });
-})
+});

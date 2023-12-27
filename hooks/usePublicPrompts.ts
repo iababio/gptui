@@ -23,20 +23,25 @@ export default function usePublicPrompts(): [Prompt[], PublicPromptsAction] {
   const promptsUpdate = trpc.publicPrompts.update.useMutation();
   const promptRemove = trpc.publicPrompts.remove.useMutation();
 
-  const add = useCallback(async (prompt: Prompt) => {
-    if (!defaultModelId) {
-      const err = tErr('No Default Model');
-      throw new Error(err);
-    }
-    await promptsAdd.mutateAsync(prompt);
-    const newState = [prompt, ...publicPrompts];
-    dispatch({ field: 'publicPrompts', value: newState });
-    return newState;
-  }, [defaultModelId, dispatch, publicPrompts, promptsAdd, tErr]);
+  const add = useCallback(
+    async (prompt: Prompt) => {
+      if (!defaultModelId) {
+        const err = tErr('No Default Model');
+        throw new Error(err);
+      }
+      await promptsAdd.mutateAsync(prompt);
+      const newState = [prompt, ...publicPrompts];
+      dispatch({ field: 'publicPrompts', value: newState });
+      return newState;
+    },
+    [defaultModelId, dispatch, publicPrompts, promptsAdd, tErr],
+  );
 
   const update = useCallback(
     async (prompt: Prompt) => {
-      const newState = publicPrompts.map((f) => f.id === prompt.id ? prompt : f);
+      const newState = publicPrompts.map((f) =>
+        f.id === prompt.id ? prompt : f,
+      );
       await promptsUpdate.mutateAsync(prompt);
       dispatch({ field: 'publicPrompts', value: newState });
       return newState;

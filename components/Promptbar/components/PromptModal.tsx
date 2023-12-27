@@ -21,7 +21,7 @@ export const PromptModal: FC<Props> = ({
   prompt,
   onClose,
   onUpdatePrompt,
-  isEditable = true
+  isEditable = true,
 }) => {
   const { t } = useTranslation('promptbar');
   const [name, setName] = useState(prompt.name);
@@ -50,7 +50,7 @@ export const PromptModal: FC<Props> = ({
       onUpdatePrompt(updatedPrompt);
     }
     onClose();
-  }
+  };
 
   useEffect(() => {
     nameInputRef.current?.focus();

@@ -2,10 +2,10 @@ import { Dispatch, createContext } from 'react';
 
 import { ActionType } from '@/hooks/useCreateReducer';
 
+import { FolderInterface } from '@/types/folder';
 import { Prompt } from '@/types/prompt';
 
 import { PromptbarInitialState } from './Promptbar.state';
-import { FolderInterface } from '@/types/folder';
 
 export interface PromptbarContextProps {
   state: PromptbarInitialState;

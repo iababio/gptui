@@ -23,19 +23,19 @@ export const models = router({
       const key = input.key;
 
       let url = `${OPENAI_API_HOST}/v1/models`;
-      if (OPENAI_API_TYPE === 'azure') {
-        url = `${OPENAI_API_HOST}/openai/deployments?api-version=${OPENAI_API_VERSION}`;
-      }
+      // if (OPENAI_API_TYPE === 'azure') {
+      //   url = `${OPENAI_API_HOST}/openai/deployments?api-version=${OPENAI_API_VERSION}`;
+      // }
 
       const response = await fetch(url, {
         headers: {
           'Content-Type': 'application/json',
           ...(OPENAI_API_TYPE === 'openai' && {
-            Authorization: `Bearer ${key ? key : process.env.OPENAI_API_KEY}`,
+            Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
           }),
-          ...(OPENAI_API_TYPE === 'azure' && {
-            'api-key': `${key ? key : process.env.OPENAI_API_KEY}`,
-          }),
+          // ...(OPENAI_API_TYPE === 'azure' && {
+          //   'api-key': `${key ? key : process.env.OPENAI_API_KEY}`,
+          // }),
           ...(OPENAI_API_TYPE === 'openai' &&
             OPENAI_ORGANIZATION && {
               'OpenAI-Organization': OPENAI_ORGANIZATION,
@@ -62,11 +62,13 @@ export const models = router({
       const models: OpenAIModel[] = json.data
         .map((model: any) => {
           for (const [key, value] of Object.entries(OpenAIModelID)) {
-            const modelId = OPENAI_API_TYPE === 'azure' ? model.model : model.id;
+            const modelId =
+              OPENAI_API_TYPE === 'azure' ? model.model : model.id;
             if (value === modelId) {
               const r: OpenAIModel = {
                 id: modelId,
-                azureDeploymentId: OPENAI_API_TYPE === 'azure' ? model.id : undefined,
+                azureDeploymentId:
+                  OPENAI_API_TYPE === 'azure' ? model.id : undefined,
                 name: OpenAIModels[value].name,
                 maxLength: OpenAIModels[value].maxLength,
                 tokenLimit: OpenAIModels[value].tokenLimit,

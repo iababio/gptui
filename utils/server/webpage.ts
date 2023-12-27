@@ -1,10 +1,10 @@
+import { getOpenAIApiEmbeddings } from './openai';
 import { calcCosineSimilarity, createEmbedding } from './similarity';
 
-import { Tiktoken } from 'tiktoken';
+import { TaskExecutionContext } from '@/agent/plugins/executor';
 import { Readability } from '@mozilla/readability';
 import jsdom, { JSDOM } from 'jsdom';
-import { getOpenAIApiEmbeddings } from './openai';
-import { TaskExecutionContext } from '@/agent/plugins/executor';
+import { Tiktoken } from 'tiktoken';
 
 export const extractTextFromHtml = (html: string): string => {
   const virtualConsole = new jsdom.VirtualConsole();
@@ -63,17 +63,23 @@ export const getSimilarChunks = async (
   context: TaskExecutionContext,
 ): Promise<string[]> => {
   const openAIApi = getOpenAIApiEmbeddings();
-  const inputEmbedding = await createEmbedding(input, openAIApi, context.userId);
+  const inputEmbedding = await createEmbedding(
+    input,
+    openAIApi,
+    context.userId,
+  );
   const chunks = chunkTextByTokenSize(encoding, text, chunkSize);
   // get embedding for each chunk
   const chunkEmbeddings = await Promise.all(
     chunks.map((chunk) => {
-      return createEmbedding(chunk, openAIApi, context.userId).then((embedding) => {
-        return {
-          embedding,
-          chunk,
-        };
-      });
+      return createEmbedding(chunk, openAIApi, context.userId).then(
+        (embedding) => {
+          return {
+            embedding,
+            chunk,
+          };
+        },
+      );
     }),
   );
   // get similarity score for each chunk

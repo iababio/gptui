@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from 'react-query';
 
+import useApiError from '@/services/useApiError';
 import useApiService from '@/services/useApiService';
 
 import { watchRefToAbort } from '@/utils/app/api';
@@ -19,7 +20,6 @@ import {
 import HomeContext from '@/pages/api/home/home.context';
 
 import useConversations from '../useConversations';
-import useApiError from '@/services/useApiError';
 
 export function useAgentMode(
   conversations: Conversation[],

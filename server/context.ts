@@ -2,11 +2,12 @@ import { getServerSession } from 'next-auth';
 
 import { getUserHash } from '@/utils/server/auth';
 
+import { UserRole } from '@/types/user';
+
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 import { TRPCError, inferAsyncReturnType } from '@trpc/server';
 import { CreateNextContextOptions } from '@trpc/server/adapters/next';
-import { UserRole } from '@/types/user';
 
 export async function createContext(opts: CreateNextContextOptions) {
   const session = await getServerSession(opts.req, opts.res, authOptions);

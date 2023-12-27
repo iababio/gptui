@@ -4,7 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { useCreateReducer } from '@/hooks/useCreateReducer';
 import useFolders from '@/hooks/useFolders';
 import usePrompts from '@/hooks/usePrompts';
+import usePublicFolders from '@/hooks/usePublicFolders';
+import usePublicPrompts from '@/hooks/usePublicPrompts';
 
+import { FolderInterface } from '@/types/folder';
 import { Prompt } from '@/types/prompt';
 
 import HomeContext from '@/pages/api/home/home.context';
@@ -15,9 +18,6 @@ import { Prompts } from './components/Prompts';
 import Sidebar from '../Sidebar';
 import PromptbarContext from './PromptBar.context';
 import { PromptbarInitialState, initialState } from './Promptbar.state';
-import usePublicFolders from '@/hooks/usePublicFolders';
-import usePublicPrompts from '@/hooks/usePublicPrompts';
-import { FolderInterface } from '@/types/folder';
 
 const Promptbar = () => {
   const { t } = useTranslation('promptbar');
@@ -70,7 +70,7 @@ const Promptbar = () => {
   };
 
   const handleCreateFolder = () => {
-    foldersAction.add(t('New folder'), "prompt");
+    foldersAction.add(t('New folder'), 'prompt');
   };
 
   const handleEditFolder = (folder: FolderInterface) => {
@@ -119,8 +119,8 @@ const Promptbar = () => {
             ' ' +
             prompt.content.toLowerCase();
           return searchable.includes(searchTerm.toLowerCase());
-        })
-      }
+        });
+      };
       promptDispatch({
         field: 'filteredPrompts',
         value: filter(prompts),
@@ -134,14 +134,21 @@ const Promptbar = () => {
     } else {
       promptDispatch({ field: 'filteredPrompts', value: prompts });
       if (promptSharingEnabled) {
-        promptDispatch({ field: 'filteredPublicPrompts', value: publicPrompts });
+        promptDispatch({
+          field: 'filteredPublicPrompts',
+          value: publicPrompts,
+        });
       }
     }
-  }, [searchTerm, prompts, publicPrompts, promptDispatch, promptSharingEnabled]);
+  }, [
+    searchTerm,
+    prompts,
+    publicPrompts,
+    promptDispatch,
+    promptSharingEnabled,
+  ]);
 
-  useEffect(() => {
-  }, [publicFolders]);
-
+  useEffect(() => {}, [publicFolders]);
 
   return (
     <PromptbarContext.Provider
@@ -158,7 +165,7 @@ const Promptbar = () => {
         handleDeleteFolder,
         handleCreatePublicFolder,
         handleEditPublicFolder,
-        handleDeletePublicFolder
+        handleDeletePublicFolder,
       }}
     >
       <Sidebar<Prompt>
