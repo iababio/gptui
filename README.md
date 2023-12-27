@@ -5,7 +5,7 @@
 
 **Docker**
 
-Setup enviroment variables:
+Setup environment variables:
 
 ```bash
 cp .env.example .env
@@ -24,7 +24,7 @@ docker compose up -d
 **1. Clone Repo**
 
 ```bash
-git clone https://github.com/iababio/GPT_Ui-ai.git
+git clone https://github.com/iababio/gptui.git
 ```
 
 **2. Install Dependencies**
